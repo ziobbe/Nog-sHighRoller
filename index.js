@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const config = require("./config.json");
 const rpgDiceRoller = require('@dice-roller/rpg-dice-roller');
-const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]});
+const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
 
 // function getQuote() {
 // 	return fetch("https://zenquotes.io/api/kindness")
@@ -28,16 +28,22 @@ client.on('interactionCreate', async interaction => {
 client.on("messageCreate", function(message) {
 	//guardians
 	if (message.author.bot) return; //let's ignore bots.
+	// message.reply('spam');
+	console.log(message.author + " says:");
+	console.log(message.content);
 	if (!message.content.startsWith(prefix)) return;
 	const commandBody = message.content.slice(prefix.length);
+	console.log("command body:" + commandBody);
 	const args = commandBody.split(' ');
+	console.log("args: "+args);
 	const command = args.shift().toLowerCase();
+	console.log('command:'+command);
 	if (command === "ping") {
 		const timeTaken = Date.now() - message.createdTimestamp;
 		message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
 	}
 	if (command==="r"){
-		const roll= new rpgDiceRoller(commandBody);
+		const roll = new rpgDiceRoller.DiceRoll(args[1]);
 		message.reply(" ${roll}!");
 	}
 	// if (command === "sum") {
