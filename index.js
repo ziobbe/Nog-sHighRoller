@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const config = require("./config.json");
+const fetch = require("node-fetch")
 const client = new Discord.Client({intents: ["GUILDS", "GUILD_MESSAGES"]});
 
 function getQuote() {
@@ -29,6 +30,8 @@ client.on("messageCreate", function(message) {
 		const sum = numArgs.reduce((counter, x) => counter += x);
 		message.reply(`The sum of all the arguments you provided is ${sum}!`);
 	}
-	
+	if (command === "inspiration"){
+		message.reply(getQuote());
+	}
 });
 client.login(config.BOT_TOKEN);
