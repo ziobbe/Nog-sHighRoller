@@ -28,10 +28,10 @@ client.on('interactionCreate', async interaction => {
 client.on("messageCreate", function(message) {
 	//guardians
 	if (message.author.bot) return; //let's ignore bots.
-	// message.reply('spam');
+	if (!message.content.startsWith(prefix)) return;
+
 	console.log(message.author + " says:");
 	console.log(message.content);
-	if (!message.content.startsWith(prefix)) return;
 	const commandBody = message.content.slice(prefix.length);
 	console.log("command body:" + commandBody);
 	const args = commandBody.split(' ');
@@ -43,16 +43,23 @@ client.on("messageCreate", function(message) {
 		message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
 	}
 	if (command==="r"){
-		const roll = new rpgDiceRoller.DiceRoll(args[1]);
-		message.reply(" ${roll}!");
+		const rollin=args.join('')
+		console.log('trying '+ rollin);
+		const roll = new rpgDiceRoller.DiceRoll(rollin)??'invalid roll'; //tryn null coalesing to catch failing instance
+		console.log(`${roll.output}!`);
+		message.reply(`${roll.output}!`);
+	}
+	if(command==="an"){
+		console.log(args);
+		console.log('trying '+ args.join(' '));
 	}
 	// if (command === "sum") {
 	// 	const numArgs = args.map(x => parseFloat(x));
 	// 	const sum = numArgs.reduce((counter, x) => counter += x);
 	// 	message.reply(`The sum of all the arguments you provided is ${sum}!`);
 	// }
-	if (command === "inspiration"){
-		message.reply(getQuote());
-	}
+	// if (command === "inspiration"){
+	// 	message.reply(getQuote());
+	// }
 });
 client.login(config.BOT_TOKEN);
